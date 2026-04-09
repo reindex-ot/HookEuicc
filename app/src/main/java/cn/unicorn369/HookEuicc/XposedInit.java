@@ -61,7 +61,22 @@ public class XposedInit implements IXposedHookLoadPackage, IXposedHookZygoteInit
                 lpparam.classLoader, "isEuicc", 
                 XC_MethodReplacement.returnConstant(false)
             );
-            XposedBridge.log("HookEuicc-bypassOmapi 已启用: " + lpparam.packageName);
+
+            // Hook UiccCard
+            //XposedHelpers.findAndHookMethod(
+            //    "com.android.internal.telephony.uicc.UiccCard", 
+            //    lpparam.classLoader, 
+            //    "isEuicc", 
+            //    XC_MethodReplacement.returnConstant(false)
+            //);
+
+            // Hook UiccProfile
+            //XposedHelpers.findAndHookMethod(
+            //    "com.android.internal.telephony.uicc.UiccProfile", 
+            //    lpparam.classLoader, 
+            //    "isEuicc", 
+            //    XC_MethodReplacement.returnConstant(false)
+            //);
         }
 
         if (bypassOmapi && lpparam.packageName.equals("com.android.se")) {
@@ -76,11 +91,13 @@ public class XposedInit implements IXposedHookLoadPackage, IXposedHookZygoteInit
                     return null;
                 }
             });
-            XposedBridge.log("HookEuicc-bypassOmapi 已启用: " + lpparam.packageName);
         }
 
+        XposedBridge.log("HookEuicc-enableHook: " + enableHook);
+        XposedBridge.log("HookEuicc-noEuicc: " + noEuicc);
+        XposedBridge.log("HookEuicc-bypassOmapi: " + bypassOmapi);
+
         if (!enableHook) {
-            XposedBridge.log("HookEuicc 已禁用: " + lpparam.packageName);
             return;
         }
         //Class
